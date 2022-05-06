@@ -92,6 +92,9 @@ data "aws_iam_policy_document" "this_lambda" {
 
 # todo: this only works with the symlink for ../../lambda inside the receiver module
 resource "null_resource" "lambda_build" {
+  triggers = {
+    always_run = timestamp()
+  }
   provisioner "local-exec" {
     command = "cd ${path.module}/lambda && go build main.go"
     environment = {
