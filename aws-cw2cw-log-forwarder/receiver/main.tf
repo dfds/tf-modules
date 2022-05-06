@@ -162,9 +162,8 @@ resource "aws_lambda_function" "this_lambda" {
   handler = "main"
   runtime = "go1.x"
   timeout = 50
-  s3_bucket = aws_s3_bucket.lambda.bucket
-  s3_key = aws_s3_bucket_object.lambda_executable.id
-  source_code_hash = filebase64(local.sha256_file)
+  filename = "${var.lambda_dir}/${local.go_file_output_name}"
+  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
   role = aws_iam_role.this_lambda.arn
   memory_size = 512
   environment {

@@ -91,34 +91,22 @@ data "aws_iam_policy_document" "this_lambda" {
 }
 
 # todo: this only works with the symlink for ../../lambda inside the receiver module
-#resource "null_resource" "lambda_build" {
-#  triggers = {
-#    source_code_hash = filebase64sha256("${path.module}/lambda/main.go")
-#    #always_run = timestamp()
-#  }
-#
-#  provisioner "local-exec" {
-#    command = "sh build.sh"
-#    working_dir = "${path.module}/lambda"
-#  }
-#}
-
-locals {
-  md5_file              = "${path.module}/lambda/function.zip.md5.sum"
-  sha256_file           = "${path.module}/lambda/function.zip.sha256.sum"
+resource "null_resource" "lambda_build" {
+  provisioner "local-exec" {
+    command = "cd ${path.module}/lambda && go build main.go"
+    environment = {
+      GOOS = "linux"
+      GOARCH = "amd64"
+      CGO_ENABLED = "0"
+    }
+  }
 }
 
-data "aws_caller_identity" "current" {}
-
-resource "aws_s3_bucket" "lambda" {
-  bucket = "${data.aws_caller_identity.current.account_id}-${var.base_name}-lambda"
-}
-
-resource "aws_s3_bucket_object" "lambda_executable" {
-  bucket = aws_s3_bucket.lambda.bucket
-  key    = "function.zip"
-  source = "${path.module}/lambda/function.zip"
-  etag   = file(local.md5_file)
+data "archive_file" "lambda_zip" {
+  depends_on = [null_resource.lambda_build]
+  source_file = "${path.module}/lambda/main"
+  type = "zip"
+  output_path = "${path.module}/lambda/${local.go_file_output_name}"
 }
 
 #cloudwatch monitoring
