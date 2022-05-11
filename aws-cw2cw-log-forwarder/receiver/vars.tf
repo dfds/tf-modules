@@ -15,10 +15,6 @@ variable "sender_aws_account" {
   type = string
 }
 
-variable "log_groups" {
-  type = map
-}
-
 variable "kinesis_stream_arn" {
   type = string
 }
