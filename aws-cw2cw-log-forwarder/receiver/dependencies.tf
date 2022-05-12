@@ -148,8 +148,8 @@ locals {
   lambda_envs = {
     AWS_REGION = var.aws_region
     LOG_LEVEL = "DEBUG"
-    DYNAMODB_TABLE_KINESISRECORDS_NAME = "cf-logs-forwarder-receiver-records"
-    DYNAMODB_TABLE_LOGEVENTS_NAME = "cf-logs-forwarder-receiver"
+    DYNAMODB_TABLE_KINESISRECORDS_NAME = "${var.base_name}-records"
+    DYNAMODB_TABLE_LOGEVENTS_NAME = "${var.base_name}-receiver"
     DYNAMODB_ENTRY_TTL = 3
     CLOUDWATCH_LOGGROUP_DEFAULT_RETENTION_IN_DAYS = 30
   }
