@@ -15,10 +15,6 @@ variable "sender_aws_account" {
   type = string
 }
 
-variable "kinesis_stream_arn" {
-  type = string
-}
-
 variable "lambda_dir" {
   type = string
 }
