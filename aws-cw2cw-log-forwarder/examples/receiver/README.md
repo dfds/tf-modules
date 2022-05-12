@@ -9,6 +9,7 @@ Update ./terragrunt.hcl with the following:
 **REPLACE-WITH-VALID-AWS-REGION**: Replace this value with a valid AWS region
 
 Update ./entries/capability-name-here/terragrunt.hcl with the following:
+
 **INSERT-DESTINATION-AWS-ACCOUNT**: Replace this value with the AWS account id of the recipient AWS account
 
 **INSERT-SOURCE-AWS-ACCOUNT**: Replace this value with the AWS account id of the origin AWS account. The account that contains the logs that should be forwarded.
