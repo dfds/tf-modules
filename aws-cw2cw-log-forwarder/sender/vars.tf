@@ -24,6 +24,7 @@ variable "log_groups" {
   type = map
 }
 
-#variable "cloudwatch_destination_arn" {
-#  type = string
-#}
+variable "cloudwatch_destination_arn" {
+  type = string
+  default = ""
+}

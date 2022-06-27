@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "this_trust" {
 
 
 locals {
-  cloudwatch_destination_arn = "arn:aws:logs:${var.aws_region}:${var.destination_aws_account}:destination:aws-cw2cw-log-forwarder"
+  cloudwatch_destination_arn = var.cloudwatch_destination_arn == "" ? "arn:aws:logs:${var.aws_region}:${var.destination_aws_account}:destination:aws-cw2cw-log-forwarder" : "arn:aws:logs:${var.aws_region}:${var.destination_aws_account}:destination:${var.cloudwatch_destination_arn}"
 
   destination_access_policy = <<POLICY
 {
