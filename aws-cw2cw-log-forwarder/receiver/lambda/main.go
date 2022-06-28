@@ -26,8 +26,6 @@ import (
 
 func HandleRequest(ctx context.Context, payload events.KinesisEvent) error {
 	lambdaConf := getConfig()
-	lc, _ := lambdacontext.FromContext(ctx)
-	fmt.Printf("AwsRequestID -> %s\n", lc.AwsRequestID)
 	lambdaUniqueLogStreamName := strings.Split(lambdacontext.LogStreamName, "]")[1]
 	fmt.Printf("LambdaLogStreamName -> %s\n", lambdaUniqueLogStreamName)
 	log.SetLevel(lambdaConf.LogLevel)
@@ -40,7 +38,7 @@ func HandleRequest(ctx context.Context, payload events.KinesisEvent) error {
 	cwl := cloudwatchlogs.NewFromConfig(cfg)
 	db := dynamodb.NewFromConfig(cfg)
 
-	logStreamName := "01"
+	logStreamName := fmt.Sprintf("%s-%s", "01", lambdaUniqueLogStreamName)
 	var sequenceToken *string = nil
 	var logsContainersMapByLogGroup map[string][]*LogsContainer = make(map[string][]*LogsContainer)
 	var seenLogGroups map[string]int = make(map[string]int)
