@@ -28,7 +28,8 @@ func HandleRequest(ctx context.Context, payload events.KinesisEvent) error {
 	lambdaConf := getConfig()
 	lc, _ := lambdacontext.FromContext(ctx)
 	fmt.Printf("AwsRequestID -> %s\n", lc.AwsRequestID)
-	fmt.Printf("LambdaLogStreamName -> %s\n", lambdacontext.LogStreamName)
+	lambdaUniqueLogStreamName := strings.Split(lambdacontext.LogStreamName, "]")[1]
+	fmt.Printf("LambdaLogStreamName -> %s\n", lambdaUniqueLogStreamName)
 	log.SetLevel(lambdaConf.LogLevel)
 	log.SetFormatter(&log.JSONFormatter{})
 	log.SetOutput(os.Stdout)
