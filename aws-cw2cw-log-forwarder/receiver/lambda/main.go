@@ -5,8 +5,10 @@ import (
 	"compress/gzip"
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-lambda-go/lambdacontext"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs/types"
@@ -24,6 +26,9 @@ import (
 
 func HandleRequest(ctx context.Context, payload events.KinesisEvent) error {
 	lambdaConf := getConfig()
+	lc, _ := lambdacontext.FromContext(ctx)
+	fmt.Printf("AwsRequestID -> %s\n", lc.AwsRequestID)
+	fmt.Printf("LambdaLogStreamName -> %s\n", lambdacontext.LogStreamName)
 	log.SetLevel(lambdaConf.LogLevel)
 	log.SetFormatter(&log.JSONFormatter{})
 	log.SetOutput(os.Stdout)
