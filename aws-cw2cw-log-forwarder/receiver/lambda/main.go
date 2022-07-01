@@ -5,10 +5,8 @@ import (
 	"compress/gzip"
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/aws/aws-lambda-go/lambdacontext"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs/types"
@@ -26,8 +24,6 @@ import (
 
 func HandleRequest(ctx context.Context, payload events.KinesisEvent) error {
 	lambdaConf := getConfig()
-	lambdaUniqueLogStreamName := strings.Split(lambdacontext.LogStreamName, "]")[1]
-	fmt.Printf("LambdaLogStreamName -> %s\n", lambdaUniqueLogStreamName)
 	log.SetLevel(lambdaConf.LogLevel)
 	log.SetFormatter(&log.JSONFormatter{})
 	log.SetOutput(os.Stdout)
@@ -38,7 +34,7 @@ func HandleRequest(ctx context.Context, payload events.KinesisEvent) error {
 	cwl := cloudwatchlogs.NewFromConfig(cfg)
 	db := dynamodb.NewFromConfig(cfg)
 
-	logStreamName := fmt.Sprintf("%s-%s", "01", lambdaUniqueLogStreamName)
+	logStreamName := "01"
 	var sequenceToken *string = nil
 	var logsContainersMapByLogGroup map[string][]*LogsContainer = make(map[string][]*LogsContainer)
 	var seenLogGroups map[string]int = make(map[string]int)
